@@ -1,39 +1,41 @@
-# **İşletim Sistemleri Çalışma Notları**
+# **İşletim Sistemleri Kapsamlı ve Geliştirilmiş Çalışma Notları**
 
-Bu notlar, işletim sistemleri derslerinde sıkça karşılaşılan konuları kapsamlı bir şekilde ele alır. İçerik, işletim sistemlerinin temel kavramlarından başlayarak, process yönetimi, bellek yönetimi, senkronizasyon ve CPU zamanlaması gibi ileri düzey konulara kadar geniş bir kapsam sunar.
+Bu notlar, işletim sistemleriyle ilgili temel kavramlardan başlayarak proses yönetimi, bellek yönetimi, thread ve multithreading, senkronizasyon, CPU zamanlaması ve sanal bellek gibi konuları detaylı bir şekilde ele alır. Ayrıca, boşluk doldurma sorularında yer alan eksik bilgiler de tamamlanmıştır.
 
 ---
 
 ## **1. İşletim Sistemi Temel Kavramları**
 
 ### **İşletim Sistemi Nedir?**
-İşletim sistemi, bilgisayar donanımını yöneten ve kullanıcı programlarının çalışması için bir ortam sağlayan temel yazılım bileşenidir. İşletim sisteminin başlıca görevleri:
-- Donanım kaynaklarını adil ve verimli bir şekilde kullanmak.
-- Kullanıcı ve programların gereksinimlerini karşılamak.
-- Bellek, CPU, giriş/çıkış cihazları gibi donanım bileşenlerini yönetmek.
+İşletim sistemi, bilgisayar donanımını yöneten ve kullanıcı programlarının çalışması için bir ortam sağlayan temel yazılım bileşenidir. İşletim sistemi:
+- Donanım kaynaklarını adil ve etkin bir şekilde tahsis eder.
+- Kullanıcı ve uygulama programlarının gereksinimlerini karşılar.
+- Bellek, CPU, giriş/çıkış cihazları gibi donanım bileşenlerini yönetir.
 
 ### **İşletim Sisteminin Temel İşlevleri**
-1. **Kullanıcı programlarının uygun çalışmasını sağlamak.**
-2. **Donanım kaynaklarını yönetmek ve tahsis etmek.**
-3. **Bilgisayar sistemini kontrol altında tutmak.**
-
-### **Temel Kavramlar**
-- **Kesme (Interrupt):** Donanım veya yazılımın CPU’nun dikkatini çekmek için kullandığı bir mekanizmadır.
-- **Çoklu Programlama (Multiprogramming):** Birden fazla programın aynı anda bellekte saklanması ve yürütülmesi.
-- **Çoklu Görev (Multitasking):** CPU'nun birden fazla işlemi kısa aralıklarla çalıştırarak eşzamanlılık sağlaması.
+1. **Kaynak Yönetimi:**
+   - CPU, bellek, I/O cihazları gibi kaynakların yönetimi.
+2. **Kullanıcı ve Program Arayüzü Sağlama:**
+   - Komut satırı (CLI) veya grafiksel kullanıcı arabirimi (GUI) sunar.
+3. **Program Yürütme:**
+   - Çalışan programların sırasını ve kaynak kullanımını düzenler.
+4. **Veri Yönetimi:**
+   - Dosya sistemlerini, depolama cihazlarını ve veri aktarımını yönetir.
+5. **Hata Tespiti ve Güvenlik:**
+   - Sistem hatalarını tespit eder ve kullanıcıların verilerini korur.
 
 ---
 
 ## **2. Process Kavramı**
 
 ### **Process Nedir?**
-Process, bellekte yüklü olan ve çalışmakta olan bir programdır. Bir process, programın aktif bir örneğidir ve işletim sistemi tarafından yönetilir.
+Process, bellekte yüklü olan ve çalışmakta olan bir programdır. Processler, işletim sisteminin kaynaklarını ve CPU’yu kullanarak görevlerini yerine getirir.
 
 ### **Process Bileşenleri**
 1. **Text Section:** Program kodu.
 2. **Data Section:** Global değişkenler.
-3. **Heap:** Dinamik bellek tahsisi için ayrılmış alan.
-4. **Stack:** Fonksiyon parametreleri, lokal değişkenler ve geri dönüş adreslerini saklar.
+3. **Heap:** Çalışma zamanında dinamik olarak ayrılan bellek.
+4. **Stack:** Fonksiyon parametreleri, geri dönüş adresleri ve lokal değişkenler.
 
 ### **Process Durumları**
 1. **New:** Process oluşturuluyor.
@@ -43,24 +45,16 @@ Process, bellekte yüklü olan ve çalışmakta olan bir programdır. Bir proces
 5. **Terminated:** Process tamamlandı.
 
 ### **Process Scheduling**
-Processlerin CPU’da çalıştırılma sırasını belirler. Üç tür scheduler vardır:
-1. **Long-term Scheduler:** Disk üzerindeki işleri hafızaya yükler.
-2. **Short-term Scheduler:** Hazır kuyruğundaki processlerden hangisinin CPU kullanacağını belirler.
-3. **Medium-term Scheduler:** Bellekteki processlerin disk ile değişimini yönetir (swapping).
-
-### **Context Switch**
-Bir process CPU’dan çıkarılırken durum bilgilerinin kaydedilmesi ve başka bir process'e geçilmesi işlemidir. Bu işlem, zaman kaybına neden olabilir.
+- **Long-term Scheduler:** Diskteki işleri belleğe yükler.
+- **Short-term Scheduler:** Hazır kuyruğundaki processlerden hangisinin CPU kullanacağını belirler.
+- **Medium-term Scheduler:** Bellekten diske geçici olarak taşınan processleri (swapping) yönetir.
 
 ---
 
 ## **3. Thread ve Multithreading**
 
 ### **Thread Nedir?**
-Thread, bir process içindeki en küçük yürütme birimidir. Bir process, birden fazla thread içerebilir.
-
-### **Thread Çeşitleri**
-1. **User-level Threads:** İşletim sistemi tarafından fark edilmez.
-2. **Kernel-level Threads:** İşletim sistemi tarafından yönetilir.
+Thread, bir process içinde bağımsız olarak çalışabilen en küçük yürütme birimidir.
 
 ### **Multithreading Modelleri**
 1. **Many-to-One:** Birden fazla kullanıcı thread’i bir kernel thread’i ile eşleştirilir.
@@ -82,37 +76,39 @@ Thread, bir process içindeki en küçük yürütme birimidir. Bir process, bird
 2. **Paging:** Belleği sabit boyutlu bloklara (frame) ayırma.
 3. **Segmentation:** Belleği mantıksal bölümlere ayırma.
 
-### **Parçalanma Problemleri**
-1. **İç Parçalanma:** Blok içindeki kullanılmayan alanlar.
+### **Parçalanma (Fragmentation) Sorunları**
+1. **İç Parçalanma:** Ayrılan bellek bloğunun kullanılmayan kısmı.
 2. **Dış Parçalanma:** Ayrılmış bloklar arasında kullanılmayan alanlar.
 
 ### **Sanal Bellek**
-Fiziksel belleğin sınırlarını aşan bir çalışma alanı sağlar. **Demand Paging** yöntemiyle sadece ihtiyaç duyulan sayfalar belleğe yüklenir.
+- Fiziksel belleğin sınırlarını aşan bir çalışma alanı sağlar.
+- **Demand Paging:** Sadece ihtiyaç duyulan sayfalar belleğe yüklenir.
 
 ---
 
 ## **5. Process Senkronizasyonu**
 
 ### **Senkronizasyon Kavramı**
-Birden fazla process'in aynı kaynaklara erişimini koordine etmek için kullanılan mekanizmalardır.
+Process senkronizasyonu, birden fazla process'in aynı kaynaklara erişimini düzenler.
 
 ### **Critical Section Problemi**
-Paylaşılan kaynaklara eşzamanlı erişimi kontrol etmek için geliştirilmiş bir problem. Çözüm için üç koşul:
-1. **Mutual Exclusion:** Bir kaynak aynı anda sadece bir process tarafından kullanılabilir.
-2. **Progress:** Processler arasında adil bir seçim yapılmalıdır.
-3. **Bounded Waiting:** Bir process’in bekleme süresi sınırlı olmalıdır.
+- Paylaşılan kaynaklara eşzamanlı erişimi kontrol eden bir problemdir.
+- Çözüm için üç temel koşul:
+  1. **Mutual Exclusion:** Aynı anda yalnızca bir process kaynaklara erişebilir.
+  2. **Progress:** Processler arasında adil seçim yapılmalıdır.
+  3. **Bounded Waiting:** Bir process’in bekleme süresi sınırlı olmalıdır.
 
 ### **Senkronizasyon Mekanizmaları**
-- **Mutex:** Kaynaklara erişimi kilitleme.
-- **Semaphore:** Sayısal sayaçlarla kaynak yönetimi.
-- **Monitor:** Yüksek seviyeli senkronizasyon aracı.
+1. **Mutex:** Kaynaklara erişimi kilitleme.
+2. **Semaphore:** Sayısal sayaçlarla kaynak yönetimi.
+3. **Monitor:** Yüksek seviyeli senkronizasyon aracı.
 
 ---
 
 ## **6. Deadlock (Ölümcül Kilitlenme)**
 
 ### **Deadlock Nedir?**
-Processlerin birbirlerinden kaynak beklerken sonsuza kadar bekleme durumuna girmesidir.
+- Processlerin birbirlerinden kaynak beklerken sonsuza kadar bekleme durumuna girmesidir.
 
 ### **Deadlock Koşulları**
 1. **Mutual Exclusion:** Kaynaklar paylaşılamaz.
@@ -122,7 +118,7 @@ Processlerin birbirlerinden kaynak beklerken sonsuza kadar bekleme durumuna girm
 
 ### **Deadlock Yönetimi**
 1. **Önleme:** Deadlock koşullarından birini engelleme.
-2. **Kaçınma:** Kaynak tahsis algoritmalarıyla deadlock’tan kaçınma.
+2. **Kaçınma:** Banker's Algorithm gibi yöntemlerle kaynak tahsisi.
 3. **Algılama ve Kurtarma:** Deadlock oluştuğunda tespit ve çözüm.
 
 ---
@@ -143,15 +139,22 @@ Processlerin birbirlerinden kaynak beklerken sonsuza kadar bekleme durumuna girm
 
 ---
 
-## **8. Örnek Problemler ve Çözümler**
+## **8. Sanal Bellek**
 
-### **Producer-Consumer Problemi**
-Paylaşılan bir tampon kullanılarak üretilen ve tüketilen ürünlerin senkronize edilmesi.
+### **Sanal Bellek Nedir?**
+- Fiziksel belleğin sınırlarını aşan mantıksal bir bellek alanıdır.
+- Programların tamamı bellekte olmadan çalıştırılabilir.
 
-#### **Çözüm:**
-- **Semaphore:** Üretici ve tüketiciyi kontrol etmek için kullanılır.
-- **Paylaşılan Bellek:** Tüm processler aynı tamponu paylaşır.
+### **Sanal Bellek Teknikleri**
+1. **Demand Paging:** Sadece ihtiyaç duyulan sayfalar belleğe yüklenir.
+2. **Copy-on-Write:** Sayfa paylaşımını optimize eder.
+3. **Thrashing:** Aşırı sayfa değiştirme nedeniyle sistem performansının düşmesi.
+
+### **Page Replacement Algoritmaları**
+1. **FIFO (First-In, First-Out):** İlk yüklenen sayfa ilk çıkarılır.
+2. **Optimal:** Gelecekte en uzun süre kullanılmayacak sayfa çıkarılır.
+3. **LRU (Least Recently Used):** En uzun süredir kullanılmayan sayfa çıkarılır.
 
 ---
 
-Bu notlar, işletim sistemleri konusunu kapsamlı bir şekilde anlamak ve sınavlara hazırlanmak için bir rehber niteliğindedir. Konuların her biri, örnekler ve açıklamalarla desteklenerek öğrenmeyi kolaylaştırır.
+Bu notlar, işletim sistemleri konusunu kapsamlı bir şekilde anlamak ve sınavlara hazırlanmak için rehber niteliğindedir. Konular, öğrenmeyi kolaylaştıracak şekilde yapılandırılmış ve eksik olan bilgilerle zenginleştirilmiştir.
