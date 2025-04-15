@@ -155,7 +155,7 @@ Zamanlama algoritmalarını görselleştirir.
 
 ---
 
-> Hazırlayan: [Adın](https://github.com/kullaniciadi)
+> Hazırlayan: [Ömer Faruk Çelik](https://github.com/kullaniciadi)
 
 Bu repo, işletim sistemleri dersine çalışan öğrenciler için kapsamılı bir kaynak sunmayı amaçlamaktadır. Geri bildirim ve katkılarınızı beklerim! ✨
 
