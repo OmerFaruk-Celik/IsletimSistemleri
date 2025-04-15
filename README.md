@@ -533,4 +533,236 @@ Kuyruklar arasında öncelik olabilir.
 
 ---
 
+# **🧠 CPU Scheduling – Detaylı ve Örnekli Çalışma Notları**
+
+
+---
+
+## **📄 Sayfa 1: Giriş – CPU Scheduling Nedir?**
+
+### **CPU Scheduling Nedir?**
+CPU Scheduling, CPU'nun aynı anda çalışan birçok işlem arasında nasıl paylaştırılacağını belirleyen bir süreçtir.
+
+### **🧩 Neden Önemli?**
+1. **Sistem kaynaklarının etkin kullanımı:** CPU’nun boş kalmaması sağlanır.
+2. **İşletim sistemi performansını artırmak:** İşlemler hızlı ve adil bir şekilde yürütülür.
+3. **Kullanıcı deneyimini iyileştirmek:** Bekleme süreleri azaltılır, daha hızlı yanıt alınır.
+
+---
+
+## **📄 Sayfa 2: Temel Kavramlar**
+
+### **🧠 Proses (İşlem) Nedir?**
+Yürütülmekte olan bir programdır. İşlem, CPU ve diğer kaynakları kullanarak görevlerini yerine getirir.
+
+### **🔁 Proses Durumları:**
+1. **Yeni (New):** Proses oluşturuluyor.
+2. **Hazır (Ready):** CPU için bekliyor.
+3. **Çalışıyor (Running):** CPU’da aktif.
+4. **Bekliyor (Waiting):** I/O işlemi gerçekleştiriyor.
+5. **Sonlandı (Terminated):** Proses tamamlandı.
+
+🎯 **Scheduling**, **Ready** durumundaki işlemler arasında seçim yapar.
+
+---
+
+## **📄 Sayfa 3: CPU Scheduling Türleri**
+
+### **🔹 Preemptive (Zorlayıcı):**
+- İşlem yarıda kesilebilir. 
+- Daha öncelikli bir işlem geldiğinde veya zaman dilimi dolduğunda CPU alınır.
+
+### **🔹 Non-Preemptive (Zorlayıcı Olmayan):**
+- İşlem bitene kadar CPU’da kalır. Başka bir işlem müdahale edemez.
+
+#### **📌 Örnek:**
+- **Preemptive:** WhatsApp’tan gelen acil çağrı mevcut görüşmeyi böler.
+- **Non-Preemptive:** Bir film dosyası indirirken, işlem tamamlanmadan durmaz.
+
+---
+
+## **📄 Sayfa 4: Zamanlama Kriterleri**
+
+### **📊 Zamanlama Kriterleri:**
+1. **CPU Kullanımı (CPU Utilization):** CPU ne kadar aktif kullanılıyor?
+2. **Throughput:** Belirli zamanda tamamlanan işlem sayısı.
+3. **Turnaround Time:** İşin gönderilmesi ile bitmesi arasındaki süre.
+4. **Waiting Time:** İşlemin Ready kuyruğunda beklediği süre.
+5. **Response Time:** İşlemden ilk yanıtın alındığı süre.
+
+🎯 **Hedef:** Bekleme süreleri düşük, CPU kullanımı yüksek olmalıdır.
+
+---
+
+## **📄 Sayfa 5: FCFS (First Come First Serve)**
+
+### **📋 Mantık:**
+- İlk gelen işlem önce çalışır.
+
+### **📌 Örnek:**
+| Proses | Süre (ms) |
+|--------|-----------|
+| **P1** | 24        |
+| **P2** | 3         |
+| **P3** | 3         |
+
+**Sıra:** P1 → P2 → P3  
+**Bekleme Süreleri:**
+- **P1:** 0 ms.
+- **P2:** 24 ms.
+- **P3:** 27 ms.  
+**Ortalama Bekleme Süresi:** (0 + 24 + 27) / 3 = **17 ms**
+
+🧠 **Not:** Uzun işlemler, diğerlerini bekletir (**Convoy Effect**).
+
+---
+
+## **📄 Sayfa 6: SJF (Shortest Job First)**
+
+### **📋 Mantık:**
+- Süresi en kısa olan işlem önce çalışır.
+- Ortalama bekleme süresi düşer.
+
+### **📌 Örnek:**
+| Proses | Süre (ms) |
+|--------|-----------|
+| **P1** | 6         |
+| **P2** | 8         |
+| **P3** | 7         |
+| **P4** | 3         |
+
+**Sıra:** P4 → P1 → P3 → P2  
+**Bekleme Süreleri:**
+- **P4:** 0 ms.
+- **P1:** 3 ms.
+- **P3:** 9 ms.
+- **P2:** 16 ms.  
+**Ortalama Bekleme Süresi:** (0 + 3 + 9 + 16) / 4 = **7 ms**
+
+🧠 **Not:** Süreleri önceden bilmek her zaman mümkün değildir.
+
+---
+
+## **📄 Sayfa 7: SRTF (Shortest Remaining Time First)**
+
+### **📋 Mantık:**
+- En kısa kalan süreye sahip işlem öne alınır (**Preemptive versiyonu**).
+
+#### **📌 Örnek:**
+- **P1 başlar (10 ms).**
+- 2 ms sonra **P2 gelir (kalan 5 ms).**
+- **P2** geçer çünkü süresi daha kısadır.
+
+🧠 **Not:** Daha kısa bir işlem gelirse, mevcut iş yarıda kesilir.
+
+---
+
+## **📄 Sayfa 8: Priority Scheduling**
+
+### **📋 Mantık:**
+- Önceliği yüksek olan işlem önce çalışır.
+- **Öncelik:** Küçük sayı = Yüksek öncelik.
+
+#### **📌 Örnek:**
+| Proses | Süre (ms) | Öncelik |
+|--------|-----------|---------|
+| **P1** | 10        | 3       |
+| **P2** | 1         | 1       |
+| **P3** | 2         | 4       |
+| **P4** | 1         | 5       |
+
+**Sıra:** P2 → P1 → P3 → P4
+
+⚠️ **Açlık (Starvation):** Düşük öncelikliler bekleyebilir.  
+💡 **Çözüm:** **Yaşlandırma (Aging):** Zamanla öncelik artar.
+
+---
+
+## **📄 Sayfa 9: Round Robin (Zaman Dilimli)**
+
+### **📋 Mantık:**
+- Her işleme sırayla eşit zaman dilimi (**Quantum**) verilir.
+
+#### **📌 Örnek:**
+| Proses | Süre (ms) |
+|--------|-----------|
+| **P1** | 24        |
+| **P2** | 3         |
+| **P3** | 3         |
+
+**Quantum:** 4 ms.  
+**Çalışma Sırası:**  
+P1 (4) → P2 (3) → P3 (3) → P1 (4) … devam eder.
+
+⚠️ **Dezavantaj:** Quantum küçükse fazla **context switch** olur.  
+🎯 **Avantaj:** Kullanıcı dostu, hızlı tepki.
+
+---
+
+## **📄 Sayfa 10: Multilevel Queue**
+
+### **📋 Mantık:**
+- İşlemler farklı kuyruklara ayrılır:
+  - Etkileşimli işlemler.
+  - Sistem işlemleri.
+  - Arka plan işlemleri.
+- Her kuyruk farklı bir algoritma kullanır.
+
+#### **📌 Örnek:**
+- **Etkileşimli işler:** Round Robin.
+- **Arka plan işler:** FCFS.
+
+---
+
+## **📄 Sayfa 11: Multilevel Feedback Queue**
+
+### **📋 Mantık:**
+- İşlem özelliklerine göre kuyruklar arasında geçiş yapılır.
+- Dinamik ve esnek bir yapıdır.
+
+#### **📌 Örnek:**
+- **CPU’yu çok kullanan işlem:** Alt seviyeye alınır.
+- **I/O ağırlıklı kısa işlem:** Üst seviyeye çıkarılır.
+
+🎯 **Avantaj:** Dinamik, adil, etkili.
+
+---
+
+## **📄 Sayfa 12: CPU Scheduling ile İlgili Problemler**
+
+1. **Açlık (Starvation):** Sürekli ertelenen işlemler.
+2. **Context Switch Overhead:** Sürekli geçişlerde zaman kaybı.
+3. **Tahmin Hataları:** SJF gibi algoritmalarda işlem süresi bilinemez.
+
+---
+
+## **📄 Sayfa 13: Gantt Diyagramı Kullanımı**
+
+### **🛠️ Gantt Şeması Nedir?**
+- İşlem sıralarını görselleştirmek için kullanılır.
+
+#### **📌 Örnek (FCFS):**
+```
+P1 |———|———|———|———|———|———|
+P2             |——|——|——|
+P3                   |——|——|——|
+Zaman:       0     6     9     12
+```
+
+🎯 **Avantaj:** Zaman analizi kolaylaşır.
+
+---
+
+## **📄 Sayfa 14: Algoritmaların Karşılaştırması**
+
+| **Algoritma**         | **Preemptive?** | **Açlık Riski** | **Ortalama Bekleme Süresi** | **Kullanıcı Dostu** |
+|------------------------|-----------------|-----------------|-----------------------------|---------------------|
+| **FCFS**              | Hayır           | Az              | Orta                        | Düşük               |
+| **SJF**               | Hayır           | Yüksek          | En düşük                    | Düşük               |
+| **SRTF**              | Evet            | Yüksek          | Çok düşük                   | Orta                |
+| **Priority**          | Her ikisi       | Yüksek          | Orta                        | Değişken            |
+| **Round Robin**       | Evet            | Düşük           | Orta                        | Yüksek              |
+| **MLFQ**              | Evet            | Düşük           | Düşük                       | Yüksek              |
+
+---
 
