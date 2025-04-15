@@ -336,4 +336,201 @@ Bellek yönetimi, bilgisayar sistemlerinde RAM’in etkin bir şekilde kullanıl
 
 ---
 
-Bu geliştirilmiş ve detaylı notlar, bellek yönetimi konusunu daha derinlemesine anlamanıza yardımcı olacaktır. Her bir konu, gerçek dünyadan örneklerle desteklenmiş ve daha öğretici hale getirilmiştir. 😊
+# **🧠 CPU Scheduling — Detaylı, Basit ve Örnekli Notlar**
+
+CPU Scheduling, işletim sistemlerinin temel konularından biridir. Bu notlar, CPU Scheduling algoritmalarını ve ilgili kavramları detaylı ve örnekli bir şekilde açıklar.
+
+---
+
+## **📄 Sayfa 1: CPU Scheduling Nedir?**
+
+### **CPU Scheduling Nedir?**
+Birden fazla işlem aynı anda yürütülmek istediğinde, hangi işlemin ne zaman ve ne kadar süreyle CPU’yu kullanacağına karar verme işlemidir.
+
+### **🌀 Amaçlar:**
+1. **Verimliliği artırmak:** CPU’nun etkin kullanımını sağlamak.
+2. **CPU’nun boş kalmasını önlemek:** Tüm işlemler sırayla çalışsın.
+3. **Bekleme süresini ve yanıt süresini azaltmak:** Kullanıcı deneyimini iyileştirmek.
+
+### **🧵 İşlem Durumları:**
+1. **Ready (Hazır):** İşlem CPU için sırada.
+2. **Running (Çalışıyor):** İşlem CPU’da aktif.
+3. **Waiting (Bekliyor):** İşlem I/O işlemi yapıyor.
+
+---
+
+## **📄 Sayfa 2: Scheduling Neden Gerekli?**
+
+### **Neden Scheduling?**
+- Modern sistemlerde birden fazla işlem aynı anda çalışır.
+- Ancak genellikle tek bir CPU vardır. Bu nedenle CPU işlemler arasında adil ve verimli bir şekilde paylaşılmalıdır.
+
+#### **📌 Örnek:**
+- **Durum:** Bir kullanıcı müzik dinliyor, aynı anda bir program yükleniyor ve bir belge yazıyor.
+- **Çözüm:** CPU bu işleri sırayla ve kısa sürelerle yapar. Kullanıcı bu geçişleri fark etmez. Bu işleme **time sharing** denir.
+
+---
+
+## **📄 Sayfa 3: Scheduling Türleri**
+
+### 1. **Non-Preemptive (Zorlayıcı Olmayan):**
+- İşlem CPU'yu aldıktan sonra bitene kadar bırakmaz.
+- **Kullanım:** Basit sistemler, örneğin eski işletim sistemleri.
+
+### 2. **Preemptive (Zorlayıcı):**
+- İşlem, zaman dilimi dolunca ya da daha öncelikli bir işlem geldiğinde CPU'dan alınır.
+- **Kullanım:** Modern işletim sistemleri.
+
+#### **📌 Örnek:**
+- **Telefonla konuşurken daha önemli biri ararsa:** Görüşme kesilir ve öncelikli görüşme yapılır. **Bu, Preemptive Scheduling’tir.**
+
+---
+
+## **📄 Sayfa 4: Önemli Zamanlama Kriterleri**
+
+### **Zamanlama Kriterleri:**
+1. **CPU Kullanımı:** CPU etkin mi kullanılıyor?
+2. **Throughput:** Belirli zamanda tamamlanan işlem sayısı.
+3. **Turnaround Time:** Bir işin baştan sona kadar geçen süresi.
+4. **Waiting Time:** İşlemin kuyrukta beklediği süre.
+5. **Response Time:** İşlemden ilk yanıtın alındığı süre.
+
+🎯 **Hedef:** Bu kriterleri **maksimum verim** ve **minimum bekleme süresi** ile optimize etmek.
+
+---
+
+## **📄 Sayfa 5: FCFS (First Come First Serve)**
+
+### **Nasıl Çalışır?**
+- İşlemler sırayla tamamlanır. İlk gelen işlem önce çalışır.
+
+### **📌 Örnek:**
+| İşlem  | Süre (ms) |
+|--------|-----------|
+| **P1** | 5         |
+| **P2** | 3         |
+| **P3** | 8         |
+
+**Sıra:** P1 → P2 → P3  
+**Bekleme Süreleri:**
+- **P1:** 0 ms.
+- **P2:** 5 ms.
+- **P3:** 8 ms.  
+**Ortalama Bekleme Süresi:** (0 + 5 + 8) / 3 = **4.33 ms**
+
+🧠 **Not:** Uzun işlemler geç gelenleri bekletir (**Convoy Effect**).
+
+---
+
+## **📄 Sayfa 6: SJF (Shortest Job First)**
+
+### **Nasıl Çalışır?**
+- Süresi en kısa olan işlem önce çalışır. Ortalama bekleme süresi düşer.
+
+### **📌 Örnek:**
+| İşlem  | Süre (ms) |
+|--------|-----------|
+| **P1** | 6         |
+| **P2** | 8         |
+| **P3** | 7         |
+| **P4** | 3         |
+
+**Sıra:** P4 → P1 → P3 → P2  
+**Bekleme Süreleri:**
+- **P4:** 0 ms.
+- **P1:** 3 ms.
+- **P3:** 9 ms.
+- **P2:** 16 ms.  
+**Ortalama Bekleme Süresi:** (0 + 3 + 9 + 16) / 4 = **7 ms**
+
+🧠 **Not:** Süreleri önceden bilmek her zaman mümkün değildir.
+
+---
+
+## **📄 Sayfa 7: Priority Scheduling (Öncelik Tabanlı)**
+
+### **Nasıl Çalışır?**
+- Her işlem bir öncelik değeri alır. Önceliği yüksek olan işlem önce çalıştırılır.
+
+### **📌 Örnek:**
+| İşlem  | Süre (ms) | Öncelik |
+|--------|-----------|---------|
+| **P1** | 10        | 3       |
+| **P2** | 1         | 1       |
+| **P3** | 2         | 4       |
+| **P4** | 1         | 5       |
+| **P5** | 5         | 2       |
+
+**Öncelik Sırası:** P2 → P5 → P1 → P3 → P4
+
+🧠 **Not:** Düşük öncelikli işler sürekli ertelenebilir (**Starvation**).  
+💡 **Çözüm:** **Yaşlandırma (Aging):** Zamanla öncelik artırılır.
+
+---
+
+## **📄 Sayfa 8: Round Robin (Zaman Paylaşımlı)**
+
+### **Nasıl Çalışır?**
+- Her işleme sırayla eşit bir süre (**Quantum Time**) verilir.
+- Quantum bittiğinde işlem kuyruk sonuna atılır.
+
+### **📌 Örnek:**
+| İşlem  | Süre (ms) |
+|--------|-----------|
+| **P1** | 10        |
+| **P2** | 4         |
+| **P3** | 5         |
+
+**Quantum:** 4 ms.  
+**Çalışma Sırası:**  
+P1 (4) → P2 (4) → P3 (4) → P1 (6) → P3 (1)
+
+🧠 **Avantaj:** Kullanıcı hızlı tepki alır.  
+🧠 **Dezavantaj:** Çok fazla geçiş (**Context Switch**) overhead oluşturur.
+
+---
+
+## **📄 Sayfa 9: Multilevel Queue (Çok Seviyeli Kuyruk)**
+
+### **Nasıl Çalışır?**
+- İşlemler türüne göre farklı kuyruklara ayrılır:
+  - Sistem işlemleri.
+  - Etkileşimli işlemler.
+  - Arka plan işlemleri.
+- Her kuyruğun kendi algoritması vardır.
+
+#### **📌 Örnek:**
+- **Kuyruk 1:** Round Robin.
+- **Kuyruk 2:** FCFS.  
+Kuyruklar arasında öncelik olabilir.
+
+---
+
+## **📄 Sayfa 10: Multilevel Feedback Queue (Geri Beslemeli Kuyruk)**
+
+### **Nasıl Çalışır?**
+- İşlem özelliklerine göre kuyruk değiştirebilir.
+- **Dinamik ve esnek bir yapı** sunar.
+
+#### **📌 Örnek:**
+- CPU’yu fazla kullanan işlem alt seviyeye alınır.
+- Kısa işler üst seviyeye taşınır.
+
+🎯 **Amaç:** Hem verimlilik hem adalet sağlamak.
+
+---
+
+## **🎓 KONU ÖZETİ**
+
+| **Algoritma**          | **Adalet** | **Hızlı Yanıt** | **Ortalama Bekleme Süresi** |
+|-------------------------|------------|-----------------|-----------------------------|
+| **FCFS**               | Orta       | Düşük           | Yüksek olabilir            |
+| **SJF**                | Az         | Yüksek          | En düşük                   |
+| **Priority**           | Düşük      | Orta            | Dengesiz                   |
+| **Round Robin**        | Yüksek     | Yüksek          | Orta                       |
+| **Multilevel Queue**   | Orta       | Orta            | Orta                       |
+| **Feedback Queue**     | Yüksek     | Yüksek          | Düşük                      |
+
+---
+
+
